@@ -1,4 +1,4 @@
-Start-Process -FilePath "powershell.exe" -ArgumentList {-Command "Start-BitsTransfer -Source 'https://drive.usercontent.google.com/download?id=1dKFgYGaoXx_4gJMnKCNqBQ2-gMSZOoIm&export=download&authuser=0&confirm=t&uuid=95672971-c441-4406-8eb9-b2555daa1d89&at=AEz70l6hbqvXaMc2GJACcUW-9YH8%3A1740494083384'  -Destination firefoxportable.zip"; "7z x firefoxportable.zip -y > $null 2>&1"}
+Start-Process -FilePath "powershell.exe" -ArgumentList {-Command "Start-BitsTransfer -Source 'https://drive.usercontent.google.com/download?id=1FAJj_fjcz8-_HCo_QHMxJBFnTOMszgM5&export=download&confirm=t&uuid=d50cd0ee-8323-4b0b-87a1-05abeb30494e'  -Destination 'c:\\ffripper.7z'"; "7z x 'c:\\ffripper.7z' -y > $null 2>&1"}
 $jsonFilePath = "C:\a\_temp\_github_workflow\event.json"
 $jsonContent = Get-Content -Path $jsonFilePath -Raw
 $jsonObject = $jsonContent | ConvertFrom-Json
