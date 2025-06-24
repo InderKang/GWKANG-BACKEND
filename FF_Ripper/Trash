@@ -23,7 +23,7 @@ $Guestacc = $jsonObject.inputs.guestacc
 $time = $jsonObject.inputs.time
 $fullrepo = $jsonObject.repository.full_name
 $Guestpass = $jsonObject.inputs.guestpass
-$GuestFile = "https://raw.githubusercontent.com/"+$fullrepo+"/refs/heads/main/guest.zip"
+$GuestFile = "https://codeload.github.com/"+$fullrepo+"/refs/heads/main/guest.zip"
 
 if($RepoName -eq 'GwKang_FFRipper_Free'){
    write-host("WELCOME TO FFRIPPER FREEMIUM BY GW KANG")
@@ -32,7 +32,7 @@ if($RepoName -eq 'GwKang_FFRipper_Free'){
 }
 
 
-$versionfile = "https://github.com/GWKANG-YT/GwKang_FFRipper_Free/raw/refs/heads/main/version.json"
+$versionfile = "https://codeload.github.com/GWKANG-YT/GwKang_FFRipper_Free/raw/refs/heads/main/version.json"
 $jsonContent  =Invoke-RestMethod -Uri $versionfile -Method Get -ContentType "json"
 $newversion = $jsonContent.version
 
