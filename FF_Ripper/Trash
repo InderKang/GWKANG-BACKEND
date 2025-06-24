@@ -1,5 +1,6 @@
 # Licenced Under Creative Commons Legal Code
 # Copyright Holder GWKANG, InderKang
+$repoversion = 1.0
 
 $INTRO = @"
                                                                
@@ -13,61 +14,63 @@ $INTRO = @"
                                                               
 "@
 Write-Host $INTRO; & {Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False > $null 2>&1}
-
-
 $jsonFilePath = "D:\a\_temp\_github_workflow\event.json"
 $jsonContent = Get-Content -Path $jsonFilePath -Raw
 $jsonObject = $jsonContent | ConvertFrom-Json
 $RepoName = $jsonObject.repository.name
-$ffserver = $jsonObject.inputs.ffserver
-$Version = $jsonObject.inputs.version
-$User = $jsonObject.sender.login
+$RipMethod = $jsonObject.inputs.method
+$Guestacc = $jsonObject.inputs.guestacc
 $time = $jsonObject.inputs.time
-$code = $jsonObject.inputs.code
-if ($code -match '--code="([^"]+)"') {$code2 = '--code='+$matches[1]}
-$PASS = $Env:COMPUTERNAME
-$PASS2 = $PASS.SubString(0,2)
-$PASS3 = $Env:USERNAME
-$Day1 = (Get-Date).Year; $Day2 = (Get-Date).DayOfYear; $Day = "$Day1$Day2"
-Get-ChildItem -Path "D:\a\_temp" -Filter *.ps1 | ForEach-Object { $str = (Get-Content $_.FullName)[2] }
-$str = $str.Substring(2)
-$currhh = (Get-Date).ToUniversalTime().AddHours(5.5).ToString("hh"); $currmm = (Get-Date).ToUniversalTime().AddHours(5.5).ToString("mm"); $currentTime = [int]$currhh + [int]$currmm + [int]$Day2 + [int]$Day1 + [int]$currmon 
-$INSTANCE = $RepoName + $currentTime
-$code = '& "${Env:PROGRAMFILES(X86)}\Google\Chrome Remote Desktop\CurrentVersion\remoting_start_host.exe" '+$code2+' --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name='+$INSTANCE+' --pin=123456'
-$PASS = $PASS2 + $PASS3 + $RepoName
-$ffacc = "https://raw.githubusercontent.com/"+ $User +"/FreeFireRipper/refs/heads/main/guest100067.dat"
+$fullrepo = $jsonObject.repository.full_name
+$Guestpass = $jsonObject.inputs.guestpass
+$GuestFile = "https://raw.githubusercontent.com/"+$fullrepo+"/refs/heads/main/guest.zip"
 
-
-if($PASS -eq 'fvrunneradminFreeFireRipper'){
-   write-host("WELCOME TO FFRIPPER BY GW KANG")
+if($RepoName -eq 'GwKang_FFRipper_Free'){
+   write-host("WELCOME TO FFRIPPER FREEMIUM BY GW KANG")
 }else {
-   write-host("MAY BE YOU ARE NOT AUTHORISED OR HAVE YOU EDITED THIS CODE????"); write-host("SETUP TERMINATED"); exit
+   write-host("MAY BE YOU ARE NOT USING ORIGINAL REPO, VISIT GWKANG ON YT FOR ORIGINAL ONE"); write-host("SETUP TERMINATED"); exit
 }
 
-$RUNNR = 'Run, "C:\Users\runneradmin\Documents\ninjaripper\x86\NinjaRipper.exe"
-Sleep, 3000  
-Click, 380 78  
+
+$versionfile = "https://github.com/GWKANG-YT/GwKang_FFRipper_Free/raw/refs/heads/main/version.json"
+$jsonContent  =Invoke-RestMethod -Uri $versionfile -Method Get -ContentType "json"
+$newversion = $jsonContent.version
+
+if($newversion -eq $repoversion){
+   continue
+}else {
+   write-host "This Repo is Outdated!";write-host "Please Sync-Fork From Code Window";exit
+}
+
+$code = $jsonObject.inputs.code
+if ($code -match '--code="([^"]+)"') {$code2 = '--code='+$matches[1]}
+$INSTANCE = $RepoName
+$code = '& "${Env:PROGRAMFILES(X86)}\Google\Chrome Remote Desktop\CurrentVersion\remoting_start_host.exe" '+$code2+' --redirect-url="https://remotedesktop.google.com/_/oauthredirect" --name='+$INSTANCE+' --pin=123456'
+
+$RUNNR = 'Run "D:\Programs\TOOLS\ninjaripper1.7.1\x64\NinjaRipper.exe"
+WinWait "Ninja Ripper 1.7.1"
+WinActivate "Ninja Ripper 1.7.1"
+Sleep 500
+ControlClick "Button2", "Ninja Ripper 1.7.1"
 '
 echo $RUNNR | Out-File -FilePath "c:\temp.ahk"
 
-$BASICCMD = {
+$OldMethod = {
    Remove-Item -Path "D:\a\_temp\_github_workflow\event.json" -Force
-   cd C:\; write-host("Setting Up Resources...")
-   Start-BitsTransfer -Source 'https://drive.usercontent.google.com/download?id=1FAJj_fjcz8-_HCo_QHMxJBFnTOMszgM5&export=download&authuser=0&confirm=t&uuid=116c9cf1-4afe-42d8-94bd-0bba952f2c56&at=AEz70l4a4wg5m4qh8ETlFSfJnyqG%3A1743315552117' -Destination ffripper.7z > $null 2>&1 ; choco install chrome-remote-desktop-host autohotkey -y -r --no-progress --ignore-checksums > $null 2>&1
-   7z x ffripper.7z -p"$Version" -y > $null 2>&1
-   Write-Host "Setting Up Resources Done"
-   Invoke-WebRequest -Uri "https://drive.usercontent.google.com/download?id=16X56s-I4xQ8VsSbQ8b6YcXQ8yEodKPH-&export=download&authuser=0&confirm=t&uuid=b44a8ca5-3f50-4eb6-8227-67435a224286&at=AEz70l7xKnKUDxTRMvhm4Loauhmf%3A1743315469900" -OutFile "ffripper.reg"; reg import "ffripper.reg"; Remove-Item -Path "ffripper.reg"
+   cd C:\ ; write-host("Setting Up Resources...")
+   Start-Process -FilePath "powershell.exe" -ArgumentList {-Command "Start-BitsTransfer -Source 'https://drive.usercontent.google.com/download?id=1hT2yXENCtqpS0wLs2oIoN_REiQI61g3a&export=download&confirm=t&uuid=bd15fc60-839f-4f09-99e1-6c28afb3f735' -Destination ffripper.7z"; "7z x ffripper.7z -p$RepoName > $null 2>&1"}
+   choco install chrome-remote-desktop-host -y -r --no-progress --ignore-checksums
+   Invoke-WebRequest -Uri "https://drive.usercontent.google.com/download?id=16X56s-I4xQ8VsSbQ8b6YcXQ8yEodKPH-&export=download&authuser=0&confirm=t&uuid=71560253-01e4-4a90-a167-09b46f28fc67&at=AN8xHoo0srLDQF1ytjr7bXVOGlsE:1750757289725" -OutFile "ffripper.reg"; reg import "ffripper.reg"; Remove-Item -Path "ffripper.reg"
    $ws = New-Object -ComObject WScript.Shell; $shortcut = $ws.CreateShortcut([System.IO.Path]::Combine([Environment]::GetFolderPath('Desktop'), 'NinjaRipper.lnk')); $shortcut.TargetPath = "C:\Users\runneradmin\Documents\ninjaripper\x86\NinjaRipper.exe"; $shortcut.Save()
    $ws = New-Object -ComObject WScript.Shell; $shortcut = $ws.CreateShortcut([System.IO.Path]::Combine([Environment]::GetFolderPath('Desktop'), 'Noesis.lnk')); $shortcut.TargetPath = "C:\Users\runneradmin\Documents\noesis\Noesis.exe"; $shortcut.Save()
-   start-process c:\temp.ahk > $null 2>&1
-   sleep 5
-   Start-Process -FilePath "powershell.exe" -ArgumentList {-Command "adb devices; invoke-WebRequest $ffacc -outfile guest100067.dat ; adb push guest100067.dat storage/emulated/0/com.garena.msdk"}
+   .\temp.ahk;sleep -s 10;adb devices
+   if($Guestacc -eq 'True'){Invoke-WebRequest -Uri $GuestFile -outfile guest.zip; 7z x guest.zip -p$Guestpass; adb push "c:\\guest100067.dat" "/storage/emulated/0/com.garena.msdk/";write-host "Logged-in Guest account!"}
+   adb shell am start -n com.dts.freefireth/.FFMainActivity
    Invoke-Expression $code > $null 2>&1
-   Write-Host "Vm Id $INSTANCE"
+   Write-Host "Setup Done, $INSTANCE Started"
    Write-Host "Running For $time hours"
    $i = [int]$time*60; do { Write-Host $i; Sleep 60; $i-- } while ($i -gt 0)
    Write-Host "Time Ended"; exit
 }
 
-&$BASICCMD
-Write-Host "Thanks For Using FreeFireRipper! Have a Nice Day😃"
+if($RipMethod -eq "Older"){Invoke-Expression $OldMethod}else {Write-Host "Coming Soon"}
